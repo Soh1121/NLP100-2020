@@ -1,6 +1,7 @@
 def n_gram(target, n):
     return [target[index: index + n] for index in range(len(target) - n + 1)]
 
+
 word1 = "paraparaparadise"
 word2 = "paragraph"
 x = set(n_gram(word1, 2))
