@@ -6,4 +6,4 @@ if [ $# -ne 1 ]; then
   exit 1
 fi
 
-diff <(head -n $1 popular-names.txt) <(python 14.py)
+diff <(head -n $1 popular-names.txt) <(python 14.py $1)
