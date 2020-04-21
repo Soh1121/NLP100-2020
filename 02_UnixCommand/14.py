@@ -2,7 +2,7 @@ import sys
 
 
 if len(sys.argv) != 2:
-    print("Set a argument N, for example '$ python 14.py 3'.")
+    print("Set an argument N, for example '$ python 14.py 3'.")
     sys.exit()
 
 n = int(sys.argv[1])
