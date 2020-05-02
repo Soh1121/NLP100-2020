@@ -1,6 +1,6 @@
 #!/bin/sh
 
-cat  ./popular-names.txt | sed -e s/$'\t'/' '/g
+cat  ./popular-names.txt | sed s/$'\t'/' '/g
 
 echo "---"
 
