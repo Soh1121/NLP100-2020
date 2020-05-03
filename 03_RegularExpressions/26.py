@@ -27,6 +27,8 @@ def remove_emphasis(value):
     result = re.match(pattern, value)
     if result is not None:
         return "".join(result.group(1, 2, 3))
+    else:
+        return value
 
 
 data_frame = pd.read_json("jawiki-country.json.gz", compression="infer", lines=True)
@@ -34,5 +36,5 @@ uk_text = data_frame.query("title == 'イギリス'")['text'].values[0]
 
 ans = basic_info_extraction(uk_text)
 for key, value in ans.items():
-    remove_emphasis(value)
+    value = remove_emphasis(value)
     print(key, ":", value)
