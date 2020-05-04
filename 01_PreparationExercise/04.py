@@ -1,4 +1,7 @@
-element_symbol = "Hi He Lied Because Boron Could Not Oxidize Fluorine. New Nations Might Also Sign Peace Security Clause. Arthur King Can."
+element_symbol = "Hi He Lied Because \
+    Boron Could Not Oxidize Fluorine. \
+    New Nations Might Also Sign Peace \
+    Security Clause. Arthur King Can."
 table = str.maketrans('', '', ',.')
 words = element_symbol.translate(table).split()
 

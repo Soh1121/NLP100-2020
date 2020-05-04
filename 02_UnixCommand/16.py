@@ -20,7 +20,10 @@ for line in lines:
         i += 1
         continue
     q, mod = divmod(file_count, 26)
-    write_file = "./output/16/py_split_file_" + chr(ord('a') + q) + chr(ord('a') + mod)
+    prefix = "./output/16/py_split_file_"
+    suffix_1 = chr(ord('a') + q)
+    suffix_2 = chr(ord('a') + mod)
+    write_file = "{}{}{}".format(prefix, suffix_1, suffix_2)
     with open(write_file, mode='w') as wf:
         wf.write(output)
     file_count += 1

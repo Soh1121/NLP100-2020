@@ -8,7 +8,10 @@ def cipher(string):
     return encyption
 
 
-test = "Hi He Lied Because Boron Could Not Oxidize Fluorine. New Nations Might Also Sign Peace Security Clause. Arthur King Can."
+test = "Hi He Lied Because Boron Could \
+    Not Oxidize Fluorine. New Nations Might \
+    Also Sign Peace Security Clause. Arthur \
+    King Can."
 encyption = cipher(test)
 print(encyption)
 normal = cipher(encyption)
