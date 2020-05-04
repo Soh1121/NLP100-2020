@@ -37,8 +37,8 @@ def remove_innerlink(value):
     if len(result) != 0:
         for i in result:
             value = value.replace(i[0], i[-1])
-    pipe_pattern = r"(\[\[(.+?)\]\])"
-    result = re.findall(pipe_pattern, value)
+    pattern = r"(\[\[(.+?)\]\])"
+    result = re.findall(pattern, value)
     if len(result) != 0:
         for i in result:
             if "[[ファイル:" not in value:
