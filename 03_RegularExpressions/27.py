@@ -32,11 +32,12 @@ def remove_emphasis(value):
 
 
 def remove_innerlink(value):
-    pipe_pattern = r"(\[\[(.*?\|)(.+?)\]\])"
+    pipe_pattern = r"(.*\[\[(.*?)\|(.+)\]\])"
     result = re.findall(pipe_pattern, value)
     if len(result) != 0:
         for i in result:
-            value = value.replace(i[0], i[-1])
+            pattern = "[[{}|{}]]".format(i[1], i[2])
+            value = value.replace(pattern, i[2])
     pattern = r"(\[\[(.+?)\]\])"
     result = re.findall(pattern, value)
     if len(result) != 0:
