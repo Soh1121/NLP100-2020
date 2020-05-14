@@ -21,7 +21,6 @@ file_name = "./output/neko.txt.mecab"
 with open(file_name) as rf:
     sentences = rf.read().split("EOS\n")
 
-print(sentences)
 result = []
 for sentence in sentences:
     result.append(parse(sentence))

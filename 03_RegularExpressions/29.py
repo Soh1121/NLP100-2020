@@ -134,4 +134,4 @@ data = R.json()
 
 pages = data["query"]["pages"]
 for k, v in pages.items():
-    print (v['imageinfo'][0]['url'])
+    print(v['imageinfo'][0]['url'])
