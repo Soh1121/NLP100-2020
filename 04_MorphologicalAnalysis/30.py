@@ -23,5 +23,6 @@ with open(file_name) as rf:
 
 result = []
 for sentence in sentences:
-    result.append(parse(sentence))
+    if len(parse(sentence)) != 0:
+        result.append(parse(sentence))
 print(result)
