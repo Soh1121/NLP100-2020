@@ -1,5 +1,0 @@
-{
-  "python.linting.flake8Enabled": true,
-  "python.linting.enabled": true,
-  "python.pythonPath": "/Users/soichi/.pyenv/versions/3.7.5/bin/python"
-}
