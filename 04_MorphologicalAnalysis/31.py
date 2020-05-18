@@ -17,12 +17,9 @@ def extraction_surface(word):
     return morpheme[0], morpheme[1].split(",")
 
 
-def verb_surfaces(sentences):
-    answer = []
-    for sentence in sentences:
-        verbs = list(filter(lambda x: x["pos"] == "動詞", sentence))
-        answer += [verb["surface"] for verb in verbs]
-    return answer
+def verb_surfaces(sentence):
+    verbs = list(filter(lambda x: x["pos"] == "動詞", sentence))
+    return [verb["surface"] for verb in verbs]
 
 
 file_name = "./output/neko.txt.mecab"
@@ -34,5 +31,8 @@ for sentence in sentences:
     if len(parse(sentence)) != 0:
         result.append(parse(sentence))
 
-verb_surfaces = verb_surfaces(result)
-print("\n".join(verb_surfaces))
+verb_surface_list = []
+for sentence in result:
+    # verb_surfaces += list(itertools.chain.from_iterable(verb_surfaces(sentence)))
+    verb_surface_list += verb_surfaces(sentence)
+print("\n".join(verb_surface_list))
