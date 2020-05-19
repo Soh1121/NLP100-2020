@@ -33,6 +33,5 @@ for sentence in sentences:
 
 verb_surface_list = []
 for sentence in result:
-    # verb_surfaces += list(itertools.chain.from_iterable(verb_surfaces(sentence)))
     verb_surface_list += verb_surfaces(sentence)
 print("\n".join(verb_surface_list))

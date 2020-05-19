@@ -17,31 +17,24 @@ def extraction_surface(word):
     return morpheme[0], morpheme[1].split(",")
 
 
-def verb_surfaces(sentences):
+def verb_surfaces(sentence):
+    verbs = list(filter(lambda x: x["pos"] == "動詞", sentence))
+    return [verb["surface"] for verb in verbs]
+
+
+def verb_bases(sentence):
+    verbs = list(filter(lambda x: x["pos"] == "動詞", sentence))
+    return [verb["base"] for verb in verbs]
+
+
+def num_phrases(sentence):
     answer = []
-    for sentence in sentences:
-        verbs = list(filter(lambda x: x["pos"] == "動詞", sentence))
-        answer += [verb["surface"] for verb in verbs]
-    return answer
-
-
-def verb_bases(sentences):
-    answer = []
-    for sentence in sentences:
-        verbs = list(filter(lambda x: x["pos"] == "動詞", sentence))
-        answer += [verb["base"] for verb in verbs]
-    return answer
-
-
-def num_phrases(sentences):
-    answer = []
-    for sentence in sentences:
-        for i in range(len(sentence)):
-            words = sentence[i: i + 3]
-            if len(words) != 3:
-                break
-            if words[1]["pos1"] == "連体化":
-                answer.append("".join([j["surface"] for j in words]))
+    for i in range(len(sentence)):
+        words = sentence[i: i + 3]
+        if len(words) != 3:
+            break
+        if words[1]["pos1"] == "連体化":
+            answer.append("".join([j["surface"] for j in words]))
     return answer
 
 
@@ -54,5 +47,7 @@ for sentence in sentences:
     if len(parse(sentence)) != 0:
         result.append(parse(sentence))
 
-num_phrases = num_phrases(result)
-print("\n".join(num_phrases))
+num_phrase_list = []
+for sentence in result:
+    num_phrase_list += num_phrases(sentence)
+print("\n".join(num_phrase_list))
