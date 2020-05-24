@@ -11,7 +11,6 @@ class Morph():
 
 class Chunk():
     def __init__(self, chunk):
-        print(chunk)
         self.morphs = copy.copy(chunk["morphs"])
         self.dst = chunk["dst"]
         self.srcs = copy.copy(chunk["srcs"])
@@ -23,25 +22,25 @@ def parse(sentence):
     info = []
     for word in words:
         if word[0] == "*":
-            print(word)
             info = word.split()
-            if info[0] not in chunk:
-                chunk[info[0]] = {
+            if info[1] not in chunk:
+                chunk[info[1]] = {
                     "morphs": [],
                     "srcs": []
                 }
-            chunk[info[0]]["dst"] = info[2]
+            chunk[info[1]]["dst"] = info[2]
             if info[2] == "-1D":
                 continue
             if info[2][0] not in chunk:
                 chunk[info[2][0]] = {
+                    "morphs": [],
                     "srcs": [info[1]]
                 }
             else:
                 chunk[info[2][0]]["srcs"].append(info[1])
         else:
             arg = word.split("\t")
-            chunk[info[0]]["morphs"].append(Morph(arg[0], arg[1].split(",")))
+            chunk[info[1]]["morphs"].append(Morph(arg[0], arg[1].split(",")))
     return chunk
 
 
@@ -57,3 +56,4 @@ for sentence in sentences:
     for i in chunk_sorted:
         result.append(Chunk(i[1]))
 
+print(vars(result[7]))
