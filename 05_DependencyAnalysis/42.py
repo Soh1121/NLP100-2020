@@ -59,9 +59,37 @@ sentences = list(filter(lambda x: x != "", sentences))
 
 result = []
 for sentence in sentences:
+    block = []
     chunk = parse(sentence)
     chunk_sorted = sorted(chunk.items(), key=lambda x: x[0])
     for i in chunk_sorted:
-        result.append(Chunk(i[1]))
+        block.append(Chunk(i[1]))
+    result.append(block)
 
-print(vars(result[7]))
+for sentence in result:
+    for clause in sentence:
+        # 係り元
+        relation_from_ans = ""
+        if clause.dst != "-1D":
+            relation_from = sentence[int(clause.dst[0])]
+            morphs = relation_from.morphs
+            for morph in morphs:
+                if morph.pos != "記号":
+                    relation_from_ans += morph.surface
+
+        # 係り先
+        relation_to_ans = ""
+        for i in clause.srcs:
+            relation_to = sentence[int(i)]
+            morphs = relation_to.morphs
+            for morph in morphs:
+                if morph.pos != "記号":
+                    relation_to_ans += morph.surface
+            relation_to_ans += "\t"
+        ans = ""
+        if relation_from_ans != "":
+            ans += relation_from_ans + "\t"
+        if relation_to_ans != "":
+            ans += relation_to_ans
+        if ans != "":
+            print(ans)
