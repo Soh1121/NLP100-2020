@@ -52,6 +52,14 @@ def parse(sentence):
     return chunk
 
 
+def create_text(morphs):
+    value = ""
+    for morph in morphs:
+        if morph.pos != "記号":
+            value += morph.surface
+    return value
+
+
 file_name = "./output/neko.txt.cabocha"
 with open(file_name) as rf:
     sentences = rf.read().split("EOS\n")
@@ -68,24 +76,23 @@ for sentence in sentences:
 
 for sentence in result:
     for clause in sentence:
+        morphs = clause.morphs
+        target_clause = create_text(morphs)
+        print("現在の文節:", target_clause)
+
         # 係り元
         relation_from_ans = ""
         if clause.dst != "-1D":
             relation_from = sentence[int(clause.dst[0])]
             morphs = relation_from.morphs
-            for morph in morphs:
-                if morph.pos != "記号":
-                    relation_from_ans += morph.surface
+            relation_from_ans = create_text(morphs) + "\t"
 
         # 係り先
         relation_to_ans = ""
         for i in clause.srcs:
             relation_to = sentence[int(i)]
             morphs = relation_to.morphs
-            for morph in morphs:
-                if morph.pos != "記号":
-                    relation_to_ans += morph.surface
-            relation_to_ans += "\t"
+            relation_to_ans = create_text(morphs) + "\t"
         ans = ""
         if relation_from_ans != "":
             ans += relation_from_ans + "\t"
