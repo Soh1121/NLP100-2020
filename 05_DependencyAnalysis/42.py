@@ -80,23 +80,23 @@ for sentence in result:
         target_clause = create_text(morphs)
         print("現在の文節:", target_clause)
 
-        # 係り元
+        # 係り先
         relation_from_ans = ""
         if clause.dst != "-1D":
             relation_from = sentence[int(clause.dst[0])]
             morphs = relation_from.morphs
-            relation_from_ans = create_text(morphs) + "\t"
+            relation_from_ans = create_text(morphs)
 
-        # 係り先
-        relation_to_ans = ""
+        # 係り元
+        relation_to_ans = []
         for i in clause.srcs:
             relation_to = sentence[int(i)]
             morphs = relation_to.morphs
-            relation_to_ans = create_text(morphs) + "\t"
-        ans = ""
-        if relation_from_ans != "":
-            ans += relation_from_ans + "\t"
-        if relation_to_ans != "":
-            ans += relation_to_ans
-        if ans != "":
-            print(ans)
+            relation_to_ans.append(create_text(morphs))
+
+        # 出力
+        if 0 < len(relation_to_ans):
+            for i in relation_to_ans:
+                print(i + "\t" + target_clause + "\t" + relation_from_ans)
+        else:
+            print(target_clause + "\t" + relation_from_ans)
