@@ -25,10 +25,9 @@ def basic_info_extraction(text):
 def remove_emphasis(value):
     pattern = r"(.*?)'{1,3}(.+?)'{1,3}(.*)"
     result = re.match(pattern, value)
-    if result is not None:
+    if result:
         return "".join(result.group(1, 2, 3))
-    else:
-        return value
+    return value
 
 
 def remove_innerlink(value):
@@ -50,30 +49,27 @@ def remove_innerlink(value):
 def remove_footnote(value):
     pattern = r"(.*?)(<ref.*?</ref>)(.*)"
     result = re.match(pattern, value)
-    if result is not None:
+    if result:
         return "".join(result.group(1, 3))
-    else:
-        pattern = r"<ref.*/>"
-        value = re.sub(pattern, "", value)
-        return value
+    pattern = r"<ref.*/>"
+    value = re.sub(pattern, "", value)
+    return value
 
 
 def remove_language(value):
     pattern = r"{{lang\|.*?\|(.*?)[}}|）]"
     result = re.match(pattern, value)
-    if result is not None:
+    if result:
         return result.group(1)
-    else:
-        return value
+    return value
 
 
 def remove_temporarylink(value):
     pattern = r"{{仮リンク\|.*\|(.*)}}"
     result = re.match(pattern, value)
-    if result is not None:
+    if result:
         return result.group(1)
-    else:
-        return value
+    return value
 
 
 def remove_zero(value):
@@ -91,10 +87,9 @@ def remove_br(value):
 def remove_pipe(value):
     pattern = r".*\|(.*)"
     result = re.match(pattern, value)
-    if result is not None:
+    if result:
         return result.group(1)
-    else:
-        return value
+    return value
 
 
 file_name = "jawiki-country.json.gz"
