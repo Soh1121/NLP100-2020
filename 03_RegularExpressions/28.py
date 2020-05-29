@@ -53,10 +53,12 @@ def remove_footnote(value):
     if result is not None:
         return "".join(result.group(1, 3))
     else:
+        pattern = r"<ref.*/>"
+        value = re.sub(pattern, "", value)
         return value
 
 
-def remove_langage(value):
+def remove_language(value):
     pattern = r"{{lang\|.*?\|(.*?)[}}|）]"
     result = re.match(pattern, value)
     if result is not None:
@@ -72,12 +74,6 @@ def remove_temporarylink(value):
         return result.group(1)
     else:
         return value
-
-
-def remove_ref(value):
-    pattern = r"<ref.*/>"
-    value = re.sub(pattern, "", value)
-    return value
 
 
 def remove_zero(value):
@@ -110,9 +106,8 @@ for key, value in ans.items():
     value = remove_footnote(value)
     value = remove_emphasis(value)
     value = remove_innerlink(value)
-    value = remove_langage(value)
+    value = remove_language(value)
     value = remove_temporarylink(value)
-    value = remove_ref(value)
     value = remove_zero(value)
     value = remove_br(value)
     value = remove_pipe(value)
