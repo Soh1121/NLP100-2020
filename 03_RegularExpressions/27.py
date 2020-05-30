@@ -25,10 +25,9 @@ def basic_info_extraction(text):
 def remove_emphasis(value):
     pattern = r"(.*?)'{1,3}(.+?)'{1,3}(.*)"
     result = re.match(pattern, value)
-    if result is not None:
+    if result:
         return "".join(result.group(1, 2, 3))
-    else:
-        return value
+    return value
 
 
 def remove_innerlink(value):
