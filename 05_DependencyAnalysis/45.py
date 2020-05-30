@@ -87,14 +87,15 @@ for sentence in sentences:
         block.append(Chunk(i[1]))
     result.append(block)
 
+output = ""
 for sentence in result:
+    result = {}
     for clause in sentence:
-        result = {}
         morphs = clause.morphs
         case = extraction_case(morphs)
         if not case:
             continue
-        if "名詞" in [i.pos for i in morphs] and clause.dst != "-1D":
+        if "助詞" in [i.pos for i in morphs] and clause.dst != "-1D":
             to_clause = sentence[int(clause.dst[0])]
             to_morphs = to_clause.morphs
             if "動詞" in [j.pos for j in to_morphs]:
@@ -104,5 +105,9 @@ for sentence in result:
                         result[verb].add(case)
                     else:
                         result[verb] = set(case)
-        for k, v in result.items():
-            print(k + "\t" + " ".join(list(v)))
+    for k, v in result.items():
+        output += k + "\t" + " ".join(list(v)) + "\n"
+
+file_name = "./output/45.txt"
+with open(file_name, mode="w") as wf:
+    wf.write(output)
