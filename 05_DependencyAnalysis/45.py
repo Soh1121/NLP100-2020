@@ -95,7 +95,7 @@ for sentence in result:
         case = extraction_case(morphs)
         if not case:
             continue
-        if "助詞" in [i.pos for i in morphs] and clause.dst != "-1D":
+        if morphs[-1].pos == "助詞" and clause.dst != "-1D":
             to_clause = sentence[int(clause.dst[0])]
             to_morphs = to_clause.morphs
             if "動詞" in [j.pos for j in to_morphs]:
