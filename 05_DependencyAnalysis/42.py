@@ -83,7 +83,7 @@ for sentence in result:
         # 係り先
         relation_from_ans = ""
         if clause.dst != "-1D":
-            relation_from = sentence[int(clause.dst[0])]
+            relation_from = sentence[int(clause.dst.rstrip("D"))]
             morphs = relation_from.morphs
             relation_from_ans = create_text(morphs)
 

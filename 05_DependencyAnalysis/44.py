@@ -80,7 +80,7 @@ target = result[3]
 for clause in target:
     present_text = create_text(clause.morphs)
     if clause.dst != "-1D":
-        to_number = int(clause.dst[0])
+        to_number = int(clause.dst.rstrip("D"))
         to_text = create_text(target[to_number].morphs)
         pairs.append([present_text, to_text])
 graph = pydot.graph_from_edges(pairs, directed=True)

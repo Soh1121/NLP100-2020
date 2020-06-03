@@ -79,7 +79,7 @@ for sentence in result:
         morphs = clause.morphs
         target_clause = create_text(morphs)
         if "名詞" in [i.pos for i in morphs] and clause.dst != "-1D":
-            to_clause = sentence[int(clause.dst[0])]
+            to_clause = sentence[int(clause.dst.rstrip("D"))]
             to_morphs = to_clause.morphs
             if "動詞" in [j.pos for j in to_morphs]:
                 to_text = create_text(to_morphs)
