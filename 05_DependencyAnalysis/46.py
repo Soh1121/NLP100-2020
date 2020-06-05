@@ -68,9 +68,12 @@ def extraction_varb_base(morphs):
 
 
 def extraction_case(morphs):
-    if morphs[-1].pos == "助詞":
-        return morphs[-1].base
-    return False
+    for i in morphs[::-1]:
+        if i.pos == "記号":
+            continue
+        if i.pos == "助詞":
+            return i.base
+        return False
 
 
 file_name = "./output/neko.txt.cabocha"
