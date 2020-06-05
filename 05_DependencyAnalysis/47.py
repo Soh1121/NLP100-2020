@@ -68,9 +68,12 @@ def extraction_varb_base(morphs):
 
 
 def extraction_case(morphs):
-    if morphs[-1].pos == "助詞":
-        return morphs[-1].base
-    return False
+    for i in morphs[::-1]:
+        if i.pos == "記号":
+            continue
+        if i.pos == "助詞":
+            return i.base
+        return False
 
 
 def find_function_verb(morphs):
@@ -123,13 +126,22 @@ for sentence in result:
                 continue
             word_cases = []
             text_cases = []
+            index = 0
             for i in to_clause.srcs:
                 target_morphs = sentence[int(i)].morphs
                 if morphs != target_morphs:
                     if extraction_case(target_morphs):
-                        word_cases.append(extraction_case(target_morphs))
+                        word_cases.append((extraction_case(target_morphs), index))
                         text_cases.append(create_text(target_morphs))
-            output += verb + "\t" + " ".join(word_cases) + "\t" + " ".join(text_cases) + "\n"
+                        index += 1
+            word_cases = sorted(word_cases)
+            output_word_cases = []
+            output_text_cases = []
+            for i in word_cases:
+                output_word_cases.append(i[0])
+                output_text_cases.append(text_cases[i[1]])
+            output += verb + "\t" + " ".join(output_word_cases) + "\t" + " ".join(output_text_cases) + "\n"
+
 
 file_name = "./output/47.txt"
 with open(file_name, mode="w") as wf:
