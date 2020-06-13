@@ -9,17 +9,14 @@ def parse(sentence):
     words = [i for i in words if i != ""]
     for word in words:
         result = {}
-        result["surface"], info = extraction_surface(word)
+        morpheme = word.split("\t")
+        result["surface"] = morpheme[0]
+        info = morpheme[1].split(",")
         result["base"] = info[6]
         result["pos"] = info[0]
         result["pos1"] = info[1]
         morphemes.append(result)
     return morphemes
-
-
-def extraction_surface(word):
-    morpheme = word.split("\t")
-    return morpheme[0], morpheme[1].split(",")
 
 
 def verb_surfaces(sentence):
