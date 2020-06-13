@@ -94,7 +94,7 @@ def find_verb_base(morphs):
             return morph
 
 
-file_name = "./output/neko.txt.cabocha"
+file_name = "./output/ai.ja.txt.cabocha"
 with open(file_name) as rf:
     sentences = rf.read().split("EOS\n")
 sentences = list(filter(lambda x: x != "", sentences))
