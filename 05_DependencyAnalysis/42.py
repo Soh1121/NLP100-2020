@@ -31,24 +31,26 @@ def parse(sentence):
     for word in words:
         if word[0] == "*":
             info = word.split()
-            if info[1] not in chunk:
-                chunk[info[1]] = {
+            sentence_number = int(info[1])
+            if sentence_number not in chunk:
+                chunk[sentence_number] = {
                     "morphs": [],
                     "srcs": []
                 }
-            chunk[info[1]]["dst"] = info[2]
+            contact_number = int(info[2].rstrip("D"))
+            chunk[sentence_number]["dst"] = contact_number
             if info[2] == "-1D":
                 continue
-            if info[2][0] not in chunk:
-                chunk[info[2][0]] = {
+            if contact_number not in chunk:
+                chunk[contact_number] = {
                     "morphs": [],
-                    "srcs": [info[1]]
+                    "srcs": [sentence_number]
                 }
             else:
-                chunk[info[2][0]]["srcs"].append(info[1])
+                chunk[contact_number]["srcs"].append(sentence_number)
         else:
             arg = word.split("\t")
-            chunk[info[1]]["morphs"].append(Morph(arg[0], arg[1].split(",")))
+            chunk[sentence_number]["morphs"].append(Morph(arg[0], arg[1].split(",")))
     return chunk
 
 
@@ -82,21 +84,24 @@ for sentence in result:
 
         # 係り先
         relation_from_ans = ""
-        if clause.dst != "-1D":
-            relation_from = sentence[int(clause.dst.rstrip("D"))]
+        if clause.dst != -1:
+            relation_from = sentence[clause.dst]
             morphs = relation_from.morphs
             relation_from_ans = create_text(morphs)
 
         # 係り元
         relation_to_ans = []
         for i in clause.srcs:
-            relation_to = sentence[int(i)]
+            relation_to = sentence[i]
             morphs = relation_to.morphs
             relation_to_ans.append(create_text(morphs))
 
         # 出力
+        ans = ""
         if 0 < len(relation_to_ans):
             for i in relation_to_ans:
-                print(i + "\t" + target_clause + "\t" + relation_from_ans)
+                ans += i + "\t"
+            ans += relation_from_ans
         else:
-            print(target_clause + "\t" + relation_from_ans)
+            ans = relation_from_ans
+        print(ans)

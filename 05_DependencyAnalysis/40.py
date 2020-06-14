@@ -27,5 +27,5 @@ for sentence in sentences:
     if len(parse(sentence)) != 0:
         result.append(parse(sentence))
 
-for morpheme in result[2]:
+for morpheme in result[1]:
     print(vars(morpheme))
