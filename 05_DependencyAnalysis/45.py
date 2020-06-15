@@ -31,24 +31,26 @@ def parse(sentence):
     for word in words:
         if word[0] == "*":
             info = word.split()
-            if info[1] not in chunk:
-                chunk[info[1]] = {
+            sentence_number = int(info[1])
+            if sentence_number not in chunk:
+                chunk[sentence_number] = {
                     "morphs": [],
                     "srcs": []
                 }
-            chunk[info[1]]["dst"] = info[2]
+            contact_number = int(info[2].rstrip("D"))
+            chunk[sentence_number]["dst"] = contact_number
             if info[2] == "-1D":
                 continue
-            if info[2][0] not in chunk:
-                chunk[info[2][0]] = {
+            if contact_number not in chunk:
+                chunk[contact_number] = {
                     "morphs": [],
-                    "srcs": [info[1]]
+                    "srcs": [sentence_number]
                 }
             else:
-                chunk[info[2][0]]["srcs"].append(info[1])
+                chunk[contact_number]["srcs"].append(sentence_number)
         else:
             arg = word.split("\t")
-            chunk[info[1]]["morphs"].append(Morph(arg[0], arg[1].split(",")))
+            chunk[sentence_number]["morphs"].append(Morph(arg[0], arg[1].split(",")))
     return chunk
 
 
@@ -98,8 +100,8 @@ for sentence in result:
         case = extraction_case(morphs)
         if not case:
             continue
-        if morphs[-1].pos == "助詞" and clause.dst != "-1D":
-            to_clause = sentence[int(clause.dst.rstrip("D"))]
+        if morphs[-1].pos == "助詞" and clause.dst != -1:
+            to_clause = sentence[clause.dst]
             to_morphs = to_clause.morphs
             if "動詞" in [j.pos for j in to_morphs]:
                 verb = extraction_varb_base(to_morphs)
