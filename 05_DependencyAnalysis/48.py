@@ -31,24 +31,26 @@ def parse(sentence):
     for word in words:
         if word[0] == "*":
             info = word.split()
-            if info[1] not in chunk:
-                chunk[info[1]] = {
+            sentence_number = int(info[1])
+            if sentence_number not in chunk:
+                chunk[sentence_number] = {
                     "morphs": [],
                     "srcs": []
                 }
-            chunk[info[1]]["dst"] = info[2]
+            contact_number = int(info[2].rstrip("D"))
+            chunk[sentence_number]["dst"] = contact_number
             if info[2] == "-1D":
                 continue
-            if info[2][0] not in chunk:
-                chunk[info[2][0]] = {
+            if contact_number not in chunk:
+                chunk[contact_number] = {
                     "morphs": [],
-                    "srcs": [info[1]]
+                    "srcs": [sentence_number]
                 }
             else:
-                chunk[info[2][0]]["srcs"].append(info[1])
+                chunk[contact_number]["srcs"].append(sentence_number)
         else:
             arg = word.split("\t")
-            chunk[info[1]]["morphs"].append(Morph(arg[0], arg[1].split(",")))
+            chunk[sentence_number]["morphs"].append(Morph(arg[0], arg[1].split(",")))
     return chunk
 
 
@@ -106,12 +108,11 @@ def dependency(ans, dst, sentence):
         return ans
     clause = sentence[dst]
     ans += " -> " + create_text(clause.morphs)
-    dst = int(clause.dst.rstrip("D"))
-    print(sentence[dst - 1].dst)
+    dst = clause.dst
     return dependency(ans, dst, sentence)
 
 
-file_name = "./output/neko.txt.cabocha"
+file_name = "./output/ai.ja.txt.cabocha"
 with open(file_name) as rf:
     sentences = rf.read().split("EOS\n")
 sentences = list(filter(lambda x: x != "", sentences))
@@ -132,12 +133,10 @@ for sentence in result:
         morphs = clause.morphs
         if not has_noun(morphs):
             continue
-        dst = int(clause.dst.rstrip("D"))
+        dst = clause.dst
         ans = create_text(morphs)
-        print(dependency(ans, dst, sentence))
+        output += dependency(ans, dst, sentence) + "\n"
 
-"""
-file_name = "./output/47.txt"
+file_name = "./output/48.txt"
 with open(file_name, mode="w") as wf:
     wf.write(output)
-"""
