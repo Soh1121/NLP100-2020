@@ -107,8 +107,11 @@ def dependency(ans, dst, sentence):
     if dst == -1:
         return ans
     clause = sentence[dst]
-    ans += " -> " + create_text(clause.morphs)
+    morphs = clause.morphs
+    ans += " -> " + create_text(morphs)
     dst = clause.dst
+    if not has_noun(morphs):
+        return ans
     return dependency(ans, dst, sentence)
 
 
