@@ -133,6 +133,14 @@ def dependency(ans, dst, sentence):
     return dependency(ans, dst, sentence)
 
 
+def create_dst_lists(dst, dst_lists, sentence):
+    dst_lists.append(dst)
+    if dst < 0:
+        return dst_lists
+    this_dst = sentence[dst].dst
+    return create_dst_lists(this_dst, dst_lists, sentence)
+
+
 file_name = "./output/ai.ja.txt.cabocha"
 with open(file_name) as rf:
     sentences = rf.read().split("EOS\n")
@@ -157,7 +165,9 @@ for sentence in [result[13]]:
         if has_noun(morphs):
             nouns_phrases.append(clause)
     for i in range(len(nouns_phrases)):
+        x_dst_lists = create_dst_lists(sentence[i].dst, [], sentence)
         for j in range(i, len(nouns_phrases)):
+            y_dst_lists = create_dst_lists(sentence[j].dst, [], sentence)
             print(create_convert_text(nouns_phrases[i].morphs, "X"), create_convert_text(nouns_phrases[j].morphs, "Y"))
 
 file_name = "./output/49.txt"
