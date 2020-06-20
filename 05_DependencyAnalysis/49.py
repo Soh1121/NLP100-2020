@@ -168,6 +168,23 @@ for sentence in [result[13]]:
         x_dst_lists = create_dst_lists(sentence[i].dst, [], sentence)
         for j in range(i, len(nouns_phrases)):
             y_dst_lists = create_dst_lists(sentence[j].dst, [], sentence)
+            if y_dst_lists[0] in x_dst_lists:
+                index = x_dst_lists.index(y_dst_lists[0])
+                if 1 < len(x_dst_lists[:index]):
+                    print("i:", i)
+                    print("j:", j)
+                    print(x_dst_lists)
+                    print(y_dst_lists)
+                    print(index)
+                    ans = []
+                    for k in x_dst_lists[:index + 1]:
+                        if i == k:
+                            ans.append(create_convert_text(nouns_phrases[k].morphs, "X"))
+                        elif j == k:
+                            ans.append(create_convert_text(nouns_phrases[k].morphs, "Y"))
+                        else:
+                            ans.append(create_text(nouns_phrases[k].morphs))
+                    print(" -> ".join(ans))
             print(create_convert_text(nouns_phrases[i].morphs, "X"), create_convert_text(nouns_phrases[j].morphs, "Y"))
 
 file_name = "./output/49.txt"
