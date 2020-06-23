@@ -156,36 +156,31 @@ for sentence in sentences:
     result.append(block)
 
 output = ""
-for sentence in [result[13]]:
+for sentence in [result[33]]:
     result = {}
     nouns_phrases = []
+    # 名詞句を抽出してリスト化
     for clause in sentence:
-        # 名詞句を抽出してリスト化
         morphs = clause.morphs
         if has_noun(morphs):
             nouns_phrases.append(clause)
-    for i in range(len(nouns_phrases)):
-        x_dst_lists = create_dst_lists(sentence[i].dst, [], sentence)
-        for j in range(i, len(nouns_phrases)):
-            y_dst_lists = create_dst_lists(sentence[j].dst, [], sentence)
-            if y_dst_lists[0] in x_dst_lists:
-                index = x_dst_lists.index(y_dst_lists[0])
-                if 1 < len(x_dst_lists[:index]):
-                    print("i:", i)
-                    print("j:", j)
-                    print(x_dst_lists)
-                    print(y_dst_lists)
-                    print(index)
-                    ans = []
-                    for k in x_dst_lists[:index + 1]:
-                        if i == k:
-                            ans.append(create_convert_text(nouns_phrases[k].morphs, "X"))
-                        elif j == k:
-                            ans.append(create_convert_text(nouns_phrases[k].morphs, "Y"))
-                        else:
-                            ans.append(create_text(nouns_phrases[k].morphs))
-                    print(" -> ".join(ans))
-            print(create_convert_text(nouns_phrases[i].morphs, "X"), create_convert_text(nouns_phrases[j].morphs, "Y"))
+    for i, clause in enumerate(sentence):
+        if clause not in nouns_phrases:
+            continue
+        x_dst_lists = create_dst_lists(clause.dst, [], sentence)
+        for j in range(len(nouns_phrases)):
+            if i == j:
+                continue
+            # 文節iから構文木の根に至る経路上に文節jが存在する場合: 文節iから文節jのパスを表示
+            if j in x_dst_lists:
+                words = [create_convert_text(clause.morphs, "X")]
+                for c in x_dst_lists[:x_dst_lists.index(j) + 1]:
+                    if c == j:
+                        words.append(create_convert_text(sentence[c].morphs, "Y"))
+                    else:
+                        words.append(create_text(sentence[c].morphs))
+                print(" -> ".join(words))
+                continue
 
 file_name = "./output/49.txt"
 with open(file_name, mode="w") as wf:
