@@ -160,16 +160,17 @@ for sentence in [result[33]]:
     result = {}
     nouns_phrases = []
     # 名詞句を抽出してリスト化
-    for clause in sentence:
-        morphs = clause.morphs
+    for i in range(len(sentence)):
+        morphs = sentence[i].morphs
         if has_noun(morphs):
-            nouns_phrases.append(clause)
+            nouns_phrases.append(i)
     for i, clause in enumerate(sentence):
-        if clause not in nouns_phrases:
+        if i not in nouns_phrases:
             continue
         x_dst_lists = create_dst_lists(clause.dst, [], sentence)
-        for j in range(len(nouns_phrases)):
-            if i == j:
+        for j in nouns_phrases:
+            # print(i, j)
+            if j <= i:
                 continue
             # 文節iから構文木の根に至る経路上に文節jが存在する場合: 文節iから文節jのパスを表示
             if j in x_dst_lists:
@@ -181,6 +182,25 @@ for sentence in [result[33]]:
                         words.append(create_text(sentence[c].morphs))
                 print(" -> ".join(words))
                 continue
+            # 上記以外で，文節iと文節jから構文木の根に至る経路上で共通の文節kで交わる場合: 文節iから文節kに至る直前のパスと文節jから文節kに至る直前までのパス，文節kの内容を” | “で連結して表示
+            y_dst_lists = create_dst_lists(sentence[j].dst, [], sentence)
+            dst_lists = x_dst_lists + y_dst_lists
+            common_dst_lists = [x for x in dict.fromkeys(dst_lists) if dst_lists.count(x) > 1]
+            words = [create_convert_text(clause.morphs, "X")]
+            for k in range(x_dst_lists.index(common_dst_lists[0])):
+                index = x_dst_lists[k]
+                words.append(create_text(sentence[index].morphs))
+            pathes = [" -> ".join(words)]
+            words = [create_convert_text(sentence[j].morphs, "Y")]
+            for k in range(y_dst_lists.index(common_dst_lists[0])):
+                index = y_dst_lists[k]
+                words.append(create_text(sentence[index].morphs))
+            pathes += [" -> ".join(words)]
+            words = []
+            for k in common_dst_lists[:-1]:
+                words.append(create_text(sentence[k].morphs))
+            pathes += [" -> ".join(words)]
+            print(" | ".join(pathes))
 
 file_name = "./output/49.txt"
 with open(file_name, mode="w") as wf:
