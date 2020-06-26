@@ -32,3 +32,7 @@ X_valid, X_test, y_valid, y_test = train_test_split(X_test, y_test, test_size=0.
 X_train.to_csv('./output/train.txt', sep='\t', index=False, header=None)
 X_valid.to_csv('./output/valid.txt', sep='\t', index=False, header=None)
 X_test.to_csv('./output/test.txt', sep='\t', index=False, header=None)
+
+print("学習データ：", X_train["CATEGORY"].value_counts())
+print("検証データ：", X_valid["CATEGORY"].value_counts())
+print("評価データ：", X_test["CATEGORY"].value_counts())
