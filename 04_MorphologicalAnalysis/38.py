@@ -9,11 +9,13 @@ def parse(sentence):
     for word in words:
         result = {}
         morpheme = word.split("\t")
-        result["surface"] = morpheme[0]
         info = morpheme[1].split(",")
-        result["base"] = info[6]
-        result["pos"] = info[0]
-        result["pos1"] = info[1]
+        result = {
+            "surface": morpheme[0],
+            "base": info[6],
+            "pos": info[0],
+            "pos1": info[1]
+        }
         morphemes.append(result)
     return morphemes
 
@@ -76,10 +78,7 @@ file_name = "./output/neko.txt.mecab"
 with open(file_name) as rf:
     sentences = rf.read().split("EOS\n")
 
-result = []
-for sentence in sentences:
-    if len(parse(sentence)) != 0:
-        result.append(parse(sentence))
+sentences = [parse(s) for s in sentences if len(parse(s)) != 0]
 
 # ストップワードを設定
 file_name = "./input/Japanese.txt"
@@ -90,7 +89,7 @@ stopwords += ["の", "ん", "——", "さ", "ろ"]
 
 # 名詞を対象に実施
 frequency_of_appearance = {}
-for sentence in result:
+for sentence in sentences:
     new_frequency_of_appearance = word_frequency_of_appearance(sentence, stopwords)
     for k, v in new_frequency_of_appearance.items():
         if k in frequency_of_appearance:

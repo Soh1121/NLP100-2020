@@ -5,11 +5,13 @@ def parse(sentence):
     for word in words:
         result = {}
         morpheme = word.split("\t")
-        result["surface"] = morpheme[0]
         info = morpheme[1].split(",")
-        result["base"] = info[6]
-        result["pos"] = info[0]
-        result["pos1"] = info[1]
+        result = {
+            "surface": morpheme[0],
+            "base": info[6],
+            "pos": info[0],
+            "pos1": info[1]
+        }
         morphemes.append(result)
     return morphemes
 
@@ -28,12 +30,9 @@ file_name = "./output/neko.txt.mecab"
 with open(file_name) as rf:
     sentences = rf.read().split("EOS\n")
 
-result = []
-for sentence in sentences:
-    if len(parse(sentence)) != 0:
-        result.append(parse(sentence))
+sentences = [parse(s) for s in sentences if len(parse(s)) != 0]
 
 verb_base_list = []
-for sentence in result:
+for sentence in sentences:
     verb_base_list += verb_bases(sentence)
 print("\n".join(verb_base_list))
