@@ -8,7 +8,6 @@ def score_lr(lr, X):
 
 
 X_train = pd.read_table("./output/train.feature.txt", header=None)
-with open("./output/model.joblib", mode="rb") as f:
-    lr = joblib.load(f)
+lr = joblib.load("./output/model.joblib")
 train_pred = score_lr(lr, X_train)
 print(train_pred)
