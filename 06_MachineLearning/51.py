@@ -2,6 +2,7 @@
 import string
 import re
 import pandas as pd
+import joblib
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.preprocessing import StandardScaler
 
@@ -32,6 +33,9 @@ bag = vectorizer.fit_transform(df["TITLE"])
 scaler = StandardScaler()
 df_std = scaler.fit_transform(bag.toarray())
 df = pd.concat([df, pd.DataFrame(df_std)], axis=1)
+
+# 57.pyで利用
+joblib.dump(vectorizer.vocabulary_, "./output/vocabulary_.joblib")
 
 X_train = df.query("LABEL == 'train'").drop(cols + ["LABEL"], axis=1)
 X_valid = df.query("LABEL == 'valid'").drop(cols + ["LABEL"], axis=1)
