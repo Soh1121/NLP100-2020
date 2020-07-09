@@ -2,4 +2,5 @@ mecab-ipadic-neologd/
 .vscode/
 06_MachineLearning/input/
 06_MachineLearning/output/
-07_WordVector/input/GoogleNews-vectors-negative300.bin
+07_WordVector/input/
+07_WordVector/output/
