@@ -10,10 +10,6 @@ def culculate_similarity(row):
 
 
 tqdm.pandas()
-# df = pd.read_csv("./input/questions-words.txt", sep=" ")
-# df = df.reset_index()
-# df.columns = ["v1", "v2", "v3", "v4"]
-# df = df.dropna()
 with open("./input/questions-words.txt") as rf:
     lines = rf.readlines()
 lines = [line.rstrip("\n").split() for line in lines]
