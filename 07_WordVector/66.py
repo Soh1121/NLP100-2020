@@ -6,8 +6,8 @@ import pandas as pd
 def culcSimScore(row):
     word1 = row["Word 1"]
     word2 = row["Word 2"]
-    if word1 in model.wv and word2 in model.wv:
-        score = model.wv.similarity(word1, word2)
+    if word1 in model and word2 in model:
+        score = model.similarity(word1, word2)
     else:
         score = None
     return score
