@@ -1,10 +1,8 @@
 import pandas as pd
-import numpy as np
+import matplotlib.pyplot as plt
 from gensim.models import KeyedVectors
-from sklearn.cluster import KMeans
+from scipy.cluster.hierarchy import linkage, dendrogram
 
-
-CLUSTER_NUM = 5
 
 # 国名データ：http://www.fao.org/countryprofiles/iso3list/en/
 countries = pd.read_table("./input/countries.tsv")
@@ -20,9 +18,7 @@ for country in countries:
         country_vecs.append(model[country])
         country_names.append(country)
 
-kmeans = KMeans(n_clusters=CLUSTER_NUM, random_state=0)
-kmeans.fit(country_vecs)
-for i in range(CLUSTER_NUM):
-    cluster = np.where(kmeans.labels_ == i)[0]
-    print("cluster:", i)
-    print(", ".join([country_names[j] for j in cluster]))
+X = linkage(country_vecs, method="ward", metric="euclidean")
+plt.figure(num=None, figsize=(15, 5), dpi=200, facecolor="w", edgecolor="k")
+dendrogram(X, labels=country_names)
+plt.show()
