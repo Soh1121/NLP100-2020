@@ -1,5 +1,6 @@
 import joblib
 import torch
+import numpy as np
 import torch.nn as nn
 
 
@@ -14,7 +15,7 @@ class NN(nn.Module):
 
 
 X_train = joblib.load("./output/X_train.joblib")
-X_train = torch.from_numpy(X_train)
+X_train = torch.from_numpy(X_train.astype(np.float32))
 X = X_train[0: 4]
 
 model = NN(X.size()[1], 4)
