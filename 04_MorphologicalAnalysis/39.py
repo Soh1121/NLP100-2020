@@ -38,10 +38,8 @@ def num_surfaces(sentence):
 
 def num_phrases(sentence):
     answer = []
-    for i in range(len(sentence)):
+    for i in range(len(sentence) - 2):
         words = sentence[i: i + 3]
-        if len(words) != 3:
-            break
         if words[1]["pos1"] == "連体化":
             answer.append("".join([j["surface"] for j in words]))
     return answer
