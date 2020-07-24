@@ -3,6 +3,7 @@ import numpy as np
 import torch
 from torch.utils.data import Dataset, DataLoader
 from torch import nn, optim
+from matplotlib import pyplot as plt
 
 
 class NN(nn.Module):
@@ -36,42 +37,43 @@ def dataload(file_name, type_name):
     return data
 
 
-def calculate_accuracy(model, loader):
+def calculate_loss_accuracy(model, cel, loader):
     model.eval()
+    loss = 0.0
     total = 0
     correct = 0
     with torch.no_grad():
         for inputs, labels in loader:
             outputs = model(inputs)
+            loss += cel(outputs, labels).item()
             pred = torch.argmax(outputs, dim=-1)
             total += len(inputs)
             correct += (pred == labels).sum().item()
-    return correct / total
+    return loss / len(loader), correct / total
 
 
 X_train = dataload("./output/X_train.joblib", "float")
 X_valid = dataload("./output/X_valid.joblib", "float")
-X_test = dataload("./output/X_test.joblib", "float")
 y_train = dataload("./output/y_train.joblib", "int")
 y_valid = dataload("./output/y_valid.joblib", "int")
-y_test = dataload("./output/y_test.joblib", "int")
 
 dataset_train = CreateDataset(X_train, y_train)
 dataset_valid = CreateDataset(X_valid, y_valid)
-dataset_test = CreateDataset(X_test, y_test)
 
 dataloader_train = DataLoader(dataset_train, batch_size=1, shuffle=True)
 dataloader_valid = DataLoader(dataset_valid, batch_size=len(dataset_valid), shuffle=False)
-dataloader_test = DataLoader(dataset_test, batch_size=len(dataset_test), shuffle=False)
 
 model = NN(X_train[0: 4].size()[1], 4)
 cel = nn.CrossEntropyLoss()
 optimizer = optim.SGD(model.parameters(), lr=0.01)
 
 NUM_EPOCHS = 100
+train_losses = []
+valid_losses = []
+train_accs = []
+valid_accs = []
 for epoch in range(NUM_EPOCHS):
     model.train()
-    loss_train = 0.0
     for inputs, labels in dataloader_train:
         optimizer.zero_grad()
 
@@ -79,16 +81,20 @@ for epoch in range(NUM_EPOCHS):
         loss = cel(outputs, labels)
         loss.backward()
         optimizer.step()
+    loss_train, acc_train = calculate_loss_accuracy(model, cel, dataloader_train)
+    loss_valid, acc_valid = calculate_loss_accuracy(model, cel, dataloader_valid)
+    train_losses.append(loss_train)
+    valid_losses.append(loss_valid)
+    train_accs.append(acc_train)
+    valid_accs.append(acc_valid)
+    print("epoch: {}, loss_train: {:.4f}, accuracy_train: {:.4f}, loss_valid: {:.4f}, accuracy_valid: {:.4f}".format(epoch + 1, loss_train, acc_train, loss_valid, acc_valid))
 
-        loss_train += loss.item()
-    loss_train /= len(dataloader_train)
-    model.eval()
-    with torch.no_grad():
-        inputs, labels = next(iter(dataloader_valid))
-        outputs = model(inputs)
-        loss_valid = cel(outputs, labels)
+plt.plot(train_losses, label="train loss")
+plt.plot(valid_losses, label="valid loss")
+plt.legend()
+plt.show()
 
-acc_train = calculate_accuracy(model, dataloader_train)
-acc_test = calculate_accuracy(model, dataloader_test)
-print("正解率（学習データ）:{:.4f}".format(acc_train))
-print("正解率（評価データ）:{:.4f}".format(acc_test))
+plt.plot(train_accs, label="train acc")
+plt.plot(valid_accs, label="valid acc")
+plt.legend()
+plt.show()
