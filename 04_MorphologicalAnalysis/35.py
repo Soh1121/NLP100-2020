@@ -26,12 +26,12 @@ def verb_bases(sentence):
     return [verb["base"] for verb in verbs]
 
 
-def num_surfaces(sentence):
-    nums = list(filter(lambda x: x["pos"] == "名詞", sentence))
-    return [num["surface"] for num in nums]
+def nouns_surfaces(sentence):
+    nounses = list(filter(lambda x: x["pos"] == "名詞", sentence))
+    return [nouns["surface"] for nouns in nounses]
 
 
-def num_phrases(sentence):
+def nouns_phrases(sentence):
     answer = []
     for i in range(len(sentence) - 2):
         words = sentence[i: i + 3]
@@ -40,7 +40,7 @@ def num_phrases(sentence):
     return answer
 
 
-def num_connections(sentence):
+def nouns_connections(sentence):
     answer = []
     nouns = []
     for word in sentence:
@@ -57,7 +57,7 @@ def num_connections(sentence):
 
 def word_frequency_of_appearance(sentence, stopwords):
     frequency_of_appearance = {}
-    target = num_surfaces(sentence)
+    target = nouns_surfaces(sentence)
     for word in target:
         if word in stopwords:
             continue
@@ -79,7 +79,7 @@ file_name = "./input/Japanese.txt"
 with open(file_name) as rf:
     lines = rf.readlines()
 stopwords = [i.rstrip() for i in lines]
-stopwords += ["の", "ん", "——", "さ", "ろ"]
+stopwords += ["の", "ん", "——"]
 
 # 名詞を対象に実施
 frequency_of_appearance = {}

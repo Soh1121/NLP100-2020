@@ -26,7 +26,7 @@ def verb_bases(sentence):
     return [verb["base"] for verb in verbs]
 
 
-def num_phrases(sentence):
+def nouns_phrases(sentence):
     answer = []
     for i in range(len(sentence) - 2):
         words = sentence[i: i + 3]
@@ -41,7 +41,7 @@ with open(file_name) as rf:
 
 sentences = [parse(s) for s in sentences if len(parse(s)) != 0]
 
-num_phrase_list = []
+nouns_phrase_list = []
 for sentence in sentences:
-    num_phrase_list += num_phrases(sentence)
-print("\n".join(num_phrase_list))
+    nouns_phrase_list += nouns_phrases(sentence)
+print("\n".join(nouns_phrase_list))
