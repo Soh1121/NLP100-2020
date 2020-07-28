@@ -93,20 +93,27 @@ def model_train(
         valid_losses.append(loss_valid)
         train_accs.append(acc_train)
         valid_accs.append(acc_valid)
-        torch.save({
-            'epoch': epoch,
-            'model_state_dict': model.state_dict(),
-            'optimizer_state_dict': optimizer.state_dict()
-        },
-            "./output/77/checkpoint{}.pt".format(epoch + 1))
+        torch.save(
+            {
+                'epoch': epoch,
+                'model_state_dict': model.state_dict(),
+                'optimizer_state_dict': optimizer.state_dict()
+            },
+            "./output/77/checkpoint{}.pt".format(epoch + 1)
+        )
+
+        end_time = time.time()
+
         print(
-            "epoch: {}, loss_train: {:.4f}, accuracy_train: {:.4f}, loss_valid: {:.4f}, accuracy_valid: {:.4f}".format(
+            "epoch: {}, loss_train: {:.4f}, accuracy_train: {:.4f}, loss_valid: {:.4f}, accuracy_valid: {:.4f}, {:.4f}sec".format(
                 epoch +
                 1,
                 loss_train,
                 acc_train,
                 loss_valid,
-                acc_valid))
+                acc_valid,
+                end_time -
+                start_time))
     return {
         "train_losses": train_losses,
         "valid_losses": valid_losses,
@@ -129,12 +136,11 @@ optimizer = optim.SGD(model.parameters(), lr=0.01)
 
 NUM_EPOCHS = 100
 
-plt.plot(train_losses, label="train loss")
-plt.plot(valid_losses, label="valid loss")
-plt.legend()
-plt.show()
-
-plt.plot(train_accs, label="train acc")
-plt.plot(valid_accs, label="valid acc")
-plt.legend()
-plt.show()
+for batch_size in [2 ** i for i in range(1, 11)]:
+    print("バッチサイズ：", batch_size)
+    log = model_train(
+        X_train, X_valid,
+        batch_size, model,
+        cel, optimizer,
+        NUM_EPOCHS
+    )
